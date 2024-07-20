@@ -21,7 +21,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
     {
       url: "https://wwww.devly.dev/sitemap-generator",
-      changeFrequency: "weekly",
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
+    {
+      url: "https://wwww.devly.dev/dependency-tree",
+      changeFrequency: "monthly",
       priority: 0.8,
     },
   ];
