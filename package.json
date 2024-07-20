@@ -13,6 +13,7 @@
     "@radix-ui/react-select": "^2.1.1",
     "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/react-toast": "^1.2.1",
+    "@vercel/kv": "^2.0.0",
     "babel-plugin-react-compiler": "0.0.0-experimental-696af53-20240625",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
@@ -23,12 +24,14 @@
     "react": "19.0.0-rc-f994737d14-20240522",
     "react-dom": "19.0.0-rc-f994737d14-20240522",
     "tailwind-merge": "^2.4.0",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "uuid": "^10.0.0"
   },
   "devDependencies": {
-    "@types/node": "^20",
+    "@types/node": "^20.14.11",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/uuid": "^10.0.0",
     "eslint": "^8",
     "eslint-config-next": "15.0.0-rc.0",
     "postcss": "^8",
