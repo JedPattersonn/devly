@@ -3,6 +3,11 @@ import Link from "next/link";
 
 const tools = [
   {
+    name: "Vercel -> Discord webhooks",
+    description: "Send Vercel webhooks to Discord",
+    href: "/vercel-webhooks",
+  },
+  {
     name: "Sitemap Generator",
     description: "Generate a sitemap for your website",
     href: "/sitemap-generator",
@@ -19,7 +24,7 @@ const tools = [
   },
 ];
 
-export default function Component() {
+export default function HomePage() {
   return (
     <main className="container max-w-7xl mx-auto px-4 py-12 md:py-24">
       <div className="text-center mb-12">

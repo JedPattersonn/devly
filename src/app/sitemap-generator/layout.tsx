@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Navbar } from "@/components/Navbar";
 
 export const metadata: Metadata = {
   title: "Sitemap Generator",
@@ -8,10 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  return (
-    <main>
-      <Navbar />
-      {children}
-    </main>
-  );
+  return <main>{children}</main>;
 }
