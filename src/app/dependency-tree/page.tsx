@@ -42,7 +42,7 @@ export default function DependencyTreeVisualizer() {
         ? `&version=${encodeURIComponent(version.trim())}`
         : "";
       const response = await fetch(
-        `/api/package-dependencies?packageName=${encodeURIComponent(packageName.trim())}${versionParam}`
+        `/api/dependency-tree?packageName=${encodeURIComponent(packageName.trim())}${versionParam}`
       );
       if (!response.ok) {
         if (response.status === 404) {
