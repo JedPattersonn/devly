@@ -27,7 +27,10 @@ export default function Component() {
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         {tools.map((tool) => (
-          <div className="bg-background rounded-lg overflow-hidden shadow-md transition-all hover:-translate-y-1 hover:shadow-lg">
+          <div
+            key={tool.href}
+            className="bg-background rounded-lg overflow-hidden shadow-md transition-all hover:-translate-y-1 hover:shadow-lg"
+          >
             <div className="p-6">
               <h3 className="text-xl font-semibold mb-2">{tool.name}</h3>
               <p className="text-muted-foreground mb-4">{tool.description}</p>
