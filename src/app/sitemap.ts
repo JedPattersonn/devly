@@ -10,7 +10,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
     {
       url: "https://wwww.devly.dev/package-analyzer",
-      lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.8,
     },
@@ -22,7 +21,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
     {
       url: "https://wwww.devly.dev/sitemap-generator",
-      lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 0.8,
     },
