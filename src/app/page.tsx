@@ -1,157 +1,53 @@
-"use client";
-import React, { useState, FormEvent } from "react";
-import { OrganizationChart } from "primereact/organizationchart";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
+import Link from "next/link";
 
-import "primereact/resources/themes/lara-light-indigo/theme.css";
-import "primereact/resources/primereact.min.css";
+const tools = [
+  {
+    name: "Sitemap Generator",
+    description: "Generate a sitemap for your website",
+    href: "/sitemap-generator",
+  },
+  {
+    name: "Dependency Tree Visualizer",
+    description: "Visualize npm package dependency trees",
+    href: "/dependency-tree",
+  },
+  {
+    name: "Dependency Analyzer",
+    description: "Check for outdated dependencies in your package.json",
+    href: "/package-analyzer",
+  },
+];
 
-interface TreeNode {
-  key: string;
-  type: "dependency";
-  styleClass: string;
-  data: {
-    name: string;
-    version: string;
-  };
-  expanded: boolean;
-  children?: TreeNode[];
-}
-
-const DependencyTreeVisualizer: React.FC = () => {
-  const [packageName, setPackageName] = useState<string>("");
-  const [version, setVersion] = useState<string>("");
-  const [tree, setTree] = useState<TreeNode | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const fetchTree = async (): Promise<void> => {
-    if (!packageName.trim()) {
-      setError("Please enter a package name");
-      return;
-    }
-
-    setLoading(true);
-    setError(null);
-    setTree(null);
-
-    try {
-      const versionParam = version.trim()
-        ? `&version=${encodeURIComponent(version.trim())}`
-        : "";
-      const response = await fetch(
-        `/api/package-dependencies?packageName=${encodeURIComponent(packageName.trim())}${versionParam}`
-      );
-      if (!response.ok) {
-        if (response.status === 404) {
-          throw new Error(
-            `Package not found: ${packageName}${version ? `@${version}` : ""}`
-          );
-        }
-        throw new Error(await response.text());
-      }
-      const data = await response.json();
-      setTree(data);
-    } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "An unexpected error occurred"
-      );
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    fetchTree();
-  };
-
-  const nodeTemplate = (node: TreeNode) => {
-    return (
-      <div className="border border-gray-300 rounded p-2 bg-white shadow-sm">
-        <div className="text-gray-700 font-bold">{node.data.name}</div>
-        <div className="text-gray-500 text-sm">{node.data.version}</div>
-      </div>
-    );
-  };
-
+export default function Component() {
   return (
-    <div className="p-4">
-      <form onSubmit={handleSubmit} className="mb-4">
-        <div className="flex gap-2 mb-2">
-          <Input
-            type="text"
-            value={packageName}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setPackageName(e.target.value)
-            }
-            placeholder="Enter package name"
-            className="flex-grow"
-          />
-          <Input
-            type="text"
-            value={version}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setVersion(e.target.value)
-            }
-            placeholder="Version (optional)"
-            className="w-1/4"
-          />
-          <Button type="submit" disabled={loading}>
-            {loading ? "Loading..." : "Visualize"}
-          </Button>
-        </div>
-      </form>
-      {error && (
-        <Alert variant="destructive" className="mb-4">
-          <AlertTitle>Error</AlertTitle>
-          <AlertDescription>{error}</AlertDescription>
-        </Alert>
-      )}
-      {tree && (
-        <div
-          className="overflow-auto bg-white p-4 rounded-lg shadow-lg border border-gray-200"
-          style={{ maxHeight: "70vh", maxWidth: "100%" }}
-        >
-          <OrganizationChart value={[tree]} nodeTemplate={nodeTemplate} />
-        </div>
-      )}
-      <style jsx global>{`
-        .p-organizationchart .p-organizationchart-node-content {
-          border: none;
-          background: transparent;
-        }
-        .p-organizationchart .p-organizationchart-line-down {
-          background: #ccc;
-          height: 20px;
-        }
-        .p-organizationchart .p-organizationchart-line-down::after {
-          content: "";
-          position: absolute;
-          bottom: 0;
-          left: 50%;
-          transform: translateX(-50%);
-          width: 0;
-          height: 0;
-          border-left: 6px solid transparent;
-          border-right: 6px solid transparent;
-          border-top: 6px solid #ccc;
-        }
-        .p-organizationchart .p-organizationchart-line-left {
-          border-right: 1px solid #ccc;
-        }
-        .p-organizationchart .p-organizationchart-line-top {
-          border-top: 1px solid #ccc;
-        }
-        .p-organizationchart .p-node-toggler {
-          display: none;
-        }
-      `}</style>
-    </div>
+    <main className="container max-w-7xl mx-auto px-4 py-12 md:py-24">
+      <div className="text-center mb-12">
+        <h1 className="text-4xl font-bold tracking-tighter">
+          Powerful Tools for Developers
+        </h1>
+        <p className="mt-4 text-lg text-muted-foreground">
+          Streamline your workflow with our suite of developer tools.
+        </p>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        {tools.map((tool) => (
+          <div
+            key={tool.href}
+            className="bg-background rounded-lg overflow-hidden shadow-md transition-all hover:-translate-y-1 hover:shadow-lg"
+          >
+            <div className="p-6">
+              <h3 className="text-xl font-semibold mb-2">{tool.name}</h3>
+              <p className="text-muted-foreground mb-4">{tool.description}</p>
+              <Button>
+                <Link href={tool.href} prefetch={false}>
+                  View
+                </Link>
+              </Button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </main>
   );
-};
-
-export default DependencyTreeVisualizer;
+}

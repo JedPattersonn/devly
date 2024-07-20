@@ -3,14 +3,15 @@ import React, { useState, FormEvent } from "react";
 import { OrganizationChart } from "primereact/organizationchart";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 
-// Make sure to import PrimeReact CSS
 import "primereact/resources/themes/lara-light-indigo/theme.css";
 import "primereact/resources/primereact.min.css";
 
 interface TreeNode {
   key: string;
   type: "dependency";
+  styleClass: string;
   data: {
     name: string;
     version: string;
@@ -21,10 +22,10 @@ interface TreeNode {
 
 export default function DependencyTreeVisualizer() {
   const [packageName, setPackageName] = useState<string>("");
+  const [version, setVersion] = useState<string>("");
   const [tree, setTree] = useState<TreeNode | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const [version, setVersion] = useState<string>("");
 
   const fetchTree = async (): Promise<void> => {
     if (!packageName.trim()) {
@@ -41,9 +42,14 @@ export default function DependencyTreeVisualizer() {
         ? `&version=${encodeURIComponent(version.trim())}`
         : "";
       const response = await fetch(
-        `/api/dependency-tree?packageName=${encodeURIComponent(packageName.trim())}${versionParam}`
+        `/api/package-dependencies?packageName=${encodeURIComponent(packageName.trim())}${versionParam}`
       );
       if (!response.ok) {
+        if (response.status === 404) {
+          throw new Error(
+            `Package not found: ${packageName}${version ? `@${version}` : ""}`
+          );
+        }
         throw new Error(await response.text());
       }
       const data = await response.json();
@@ -58,6 +64,11 @@ export default function DependencyTreeVisualizer() {
     }
   };
 
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    fetchTree();
+  };
+
   const nodeTemplate = (node: TreeNode) => {
     return (
       <div className="border border-gray-300 rounded p-2 bg-white shadow-sm">
@@ -65,11 +76,6 @@ export default function DependencyTreeVisualizer() {
         <div className="text-gray-500 text-sm">{node.data.version}</div>
       </div>
     );
-  };
-
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    fetchTree();
   };
 
   return (
@@ -99,7 +105,12 @@ export default function DependencyTreeVisualizer() {
           </Button>
         </div>
       </form>
-      {error && <div className="text-red-500 mb-4">{error}</div>}
+      {error && (
+        <Alert variant="destructive" className="mb-4">
+          <AlertTitle>Error</AlertTitle>
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
+      )}
       {tree && (
         <div
           className="overflow-auto bg-white p-4 rounded-lg shadow-lg border border-gray-200"
